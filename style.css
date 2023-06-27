@@ -1,0 +1,30 @@
+*, ::before, ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    display: grid;
+    gap: 1px;
+    grid-template-columns: repeat(8, 64px);
+    grid-template-rows: repeat(8, 64px);
+}
+
+.square {
+    text-align: center;
+    width: 64px;
+    height: 64px;
+    background: gray;
+    border: 1px solid black;
+}
