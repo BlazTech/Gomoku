@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+html {
+    font-size: 22px;
+}
+
 html, body {
     height: 100%;
 }
