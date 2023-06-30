@@ -3,14 +3,22 @@ const rows = 21;
 let tableMatrix = [];
 
 const table = document.querySelector("table");
-for (let i = 0; i < rows; i++) {
+for (let r = 0; r < rows; r++) {
     tableMatrix.push([]);
     const tr = document.createElement("tr");
     table.append(tr);
 
-    for (let j = 0; j < columns; j++) {
-        tableMatrix[i].push("e");
+    for (let c = 0; c < columns; c++) {
+        tableMatrix[r].push("e");
         const th = document.createElement("th");
         tr.append(th);
+    }
+}
+
+//unfinished
+for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < columns; c++) {
+        let rows = table.rows;
+        console.log(rows[c]);
     }
 }
