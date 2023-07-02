@@ -15,10 +15,11 @@ for (let r = 0; r < rows; r++) {
     }
 }
 
-//unfinished
 for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
         let rows = table.rows;
-        console.log(rows[c]);
+        rows[c].addEventListener("click", (e) => {
+            console.log(c);
+        })
     }
 }
