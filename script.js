@@ -15,11 +15,10 @@ for (let r = 0; r < rows; r++) {
     }
 }
 
-for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < columns; c++) {
-        let rows = table.rows;
-        rows[c].addEventListener("click", (e) => {
-            console.log(c);
+for (let row of table.rows) {
+    for (let cell of row.cells) {
+        cell.addEventListener("click", (e) => {
+            console.log(row.rowIndex, cell.cellIndex);
         })
     }
 }
