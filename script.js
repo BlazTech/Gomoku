@@ -1,12 +1,12 @@
-const cells = 21;
-const rows = 21;
+const tableCells = 21;
+const tableRows = 21;
 let tableMatrix = [];
 const table = document.querySelector("table");
-let sign = "O"
+let sign = "O";
 
-function updateTable() {
-    for (let row = 0; row < rows; row++) {
-        for (let cell = 0; cell < cells; cell++) {
+function updateDisplayTable() {
+    for (let row = 0; row < tableRows; row++) {
+        for (let cell = 0; cell < tableCells; cell++) {
             if (tableMatrix[row][cell] !== "E") {
                 table.rows[row].cells[cell].innerText = tableMatrix[row][cell];
             }
@@ -17,27 +17,121 @@ function updateTable() {
 function updateTableMatrix(row, cell) {
 
     if (tableMatrix[row][cell] === "E") {
-
         tableMatrix[row][cell] = sign;
-
-        if (sign === "O") {
-            sign = "X";
-        } else {
-            sign = "O";
-        }
     }
 
-    updateTable();
+    updateDisplayTable();
+}
+
+function handleInput(row, cell) {
+    if (sign === "O") {
+        updateTableMatrix(row, cell);
+    } else {
+        let cpu = computerMove();
+        updateTableMatrix(cpu[0], cpu[1]);
+    }
+    if (sign === "O") {
+        sign = "X";
+    } else {
+        sign = "O";
+    }
+}
+
+// X = computer sign
+// O = player sign
+// B == wall
+// E == empty
+// G == inspected cell
+
+function computerMove() {
+    function getValue(row, cell) {
+        let value = 0;
+
+        if (tableMatrix[row][cell] === "E") {
+
+            function makeLine(rowMove, cellMove) {
+                let line = ""
+                for (let i = -4; i < 5; i++) {
+                    try {
+                        if (tableMatrix[row + (i * rowMove)][cell + (i * cellMove)] !== undefined) {
+                            if (i == 0) {
+                                line += "G";
+                            } else {
+                                line += tableMatrix[row + (i * rowMove)][cell + (i * cellMove)];
+                            }
+                        } else {
+                            line += "B";
+                        }
+                    } catch {
+                        line += "B";
+                    }
+                }
+                return line;
+            }
+
+
+            let xLine = makeLine(0, 1);
+            let yLine = makeLine(1, 0);
+            let leftDg = makeLine(1, 1);
+            let rightDg = makeLine(-1, 1);
+
+
+            const cellValues = {
+                "XXXX": 20000,
+                "OOOO": 10000,
+                "XXXE": 500,
+                "OOOE": 200,
+                "XXEE": 100,
+                "XXEB": 50,
+                "OEEE": 25
+            }
+
+            function lineCheck(line) {
+                let first = line.split("G")[0].split("").reverse().join("");
+                let second = line.split("G")[1];
+
+                if (first in cellValues) {
+                    value += cellValues[first];
+                }
+                if (second in cellValues) {
+                    value += cellValues[second];
+                }
+
+            }
+
+            lineCheck(xLine);
+            lineCheck(yLine);
+            lineCheck(leftDg);
+            lineCheck(rightDg);
+
+        }
+
+        return value;
+    }
+
+    let bestMove = [10, 10];
+    let bestMoveValue = 0;
+
+    for (let row = 0; row < tableRows; row++) {
+        for (let cell = 0; cell < tableCells; cell++) {
+            if (getValue(row, cell) > bestMoveValue) {
+                bestMove = [row, cell];
+                bestMoveValue = getValue(row, cell);
+                console.log(bestMove, bestMoveValue);
+            }
+        }
+    }
+    return bestMove;
 }
 
 // table creation
-for (let r = 0; r < rows; r++) {
+for (let row = 0; row < tableRows; row++) {
     tableMatrix.push([]);
     const tr = document.createElement("tr");
     table.append(tr);
 
-    for (let c = 0; c < cells; c++) {
-        tableMatrix[r].push("E");
+    for (let cell = 0; cell < tableCells; cell++) {
+        tableMatrix[row].push("E");
         const th = document.createElement("th");
         tr.append(th);
     }
@@ -47,75 +141,7 @@ for (let r = 0; r < rows; r++) {
 for (let row of table.rows) {
     for (let cell of row.cells) {
         cell.addEventListener("click", () => {
-            updateTableMatrix(row.rowIndex, cell.cellIndex);
+            handleInput(row.rowIndex, cell.cellIndex);
         })
     }
-}
-
-// ai
-
-//B == wall
-//E == empty
-
-function computerMove(sign) {
-    function getValue(row, cell) {
-        let xLineLeft = "";
-        let xLineRight = "";
-        let yLineUp = "";
-        let yLineDown = "";
-
-        
-        if (tableMatrix[row][cell] === "E") {
-
-            // x left
-            for (let i = 1; i <= 4; i++) {
-                if (tableMatrix[row][cell - i] != undefined) {
-                    xLineLeft += tableMatrix[row][cell - i];
-                } else {
-                    xLineLeft += "B"
-                }
-            } 
-
-            // x right
-            for (let i = 1; i <= 4; i++) {
-                if (tableMatrix[row][cell + i] != undefined) {
-                    xLineRight += tableMatrix[row][cell + i];
-                } else {
-                    xLineRight += "B";
-                }
-            }
-
-            // y up
-            for (let i = 1; i <= 4; i++) {
-                try {
-                    yLineUp += tableMatrix[row - i][cell];
-                } catch {
-                    yLineUp += "B";
-                }
-            }
-
-            // y down
-            for (let i = 1; i <= 4; i++) {
-                try {
-                    yLineDown += tableMatrix[row + i][cell];
-                } catch {
-                    yLineDown += "B";
-                }
-            } 
-
-            console.log("LEFT:", xLineLeft);
-            console.log("RIGHT:", xLineRight);
-            console.log("UP:", yLineUp);
-            console.log("DOWN:", yLineDown);
-
-        }
-    }
-
-    // for (let row = 0; row < rows; row++) {
-    //     for (let cell = 0; cell < cells; cell++) {
-    //         getValue(row, cell);
-    //     }
-    // }
-    
-    getValue(0, 0);
 }
