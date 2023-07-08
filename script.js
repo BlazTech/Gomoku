@@ -77,13 +77,24 @@ function computerMove() {
 
 
             const cellValues = {
-                "XXXX": 20000,
-                "OOOO": 10000,
-                "XXXE": 500,
-                "OOOE": 200,
+                "XXXX": 2000000,
+                "OOOO": 100000,
+                "XXXE": 10000,
+                "OOOE": 500,
                 "XXEE": 100,
-                "XXEB": 50,
-                "OEEE": 25
+                "OEEE": 50,
+                "XXEB": 40
+            }
+
+            const patternValues = {
+                "XGXXX": 2000000,
+                "XXGXX": 2000000,
+                "XXXGX": 2000000,
+                "OGOOO": 150000,
+                "OOGOO": 150000,
+                "OOOGO": 150000,
+                "OOGO": 200,
+                "OGOO": 200
             }
 
             function lineCheck(line) {
@@ -96,7 +107,11 @@ function computerMove() {
                 if (second in cellValues) {
                     value += cellValues[second];
                 }
-
+                for (let key in patternValues) {
+                    if (line.includes(key)) {
+                        value += patternValues[key];
+                    }
+                }
             }
 
             lineCheck(xLine);
