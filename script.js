@@ -1,8 +1,9 @@
 function startGame(cells, rows) {
-    document.body.innerHTML = "";
+    const tableContainer = document.querySelector(".table-container");
+    tableContainer.innerHTML = "";
     const table = document.createElement("table");
     table.style.borderSpacing = "1px";
-    document.body.append(table);
+    tableContainer.append(table);
 
     const tableCells = cells;
     const tableRows = rows;
