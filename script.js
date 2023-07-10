@@ -8,7 +8,7 @@ function updateDisplayTable() {
     for (let row = 0; row < tableRows; row++) {
         for (let cell = 0; cell < tableCells; cell++) {
             if (tableMatrix[row][cell] !== "E") {
-                table.rows[row].cells[cell].innerText = tableMatrix[row][cell];
+                table.rows[row + 1].cells[cell + 1].innerText = tableMatrix[row][cell];
             }
         }
     }
@@ -139,15 +139,28 @@ function computerMove() {
     return bestMove;
 }
 
-// table creation
+// tableMatrix creation
 for (let row = 0; row < tableRows; row++) {
     tableMatrix.push([]);
-    const tr = document.createElement("tr");
-    table.append(tr);
 
     for (let cell = 0; cell < tableCells; cell++) {
         tableMatrix[row].push("E");
+    }
+}
+
+//html table creation
+for (let row = 0; row < tableRows + 1; row++) {
+    const tr = document.createElement("tr");
+    table.append(tr);
+
+    for (let cell = 0; cell < tableCells + 1; cell++) {
         const th = document.createElement("th");
+        //cells in first row, first cells of each row
+        if (row === 0 && cell !== 0) {
+            th.innerText = String(cell - 1);
+        } else if (row !== 0 && cell === 0) {
+            th.innerText = String(row - 1);
+        }
         tr.append(th);
     }
 }
@@ -155,8 +168,10 @@ for (let row = 0; row < tableRows; row++) {
 // event listeners
 for (let row of table.rows) {
     for (let cell of row.cells) {
-        cell.addEventListener("click", () => {
-            handleInput(row.rowIndex, cell.cellIndex);
-        })
+        if (row.rowIndex !== 0 && cell.cellIndex !== 0) {
+            cell.addEventListener("click", () => {
+                handleInput(row.rowIndex - 1, cell.cellIndex - 1)
+            });
+        }
     }
 }
