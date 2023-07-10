@@ -32,15 +32,13 @@ function startGame(cells, rows) {
 
     function handleInput(row, cell) {
         if (sign === "O") {
-            updateTableMatrix(row, cell);
-        } else {
-            let cpu = computerMove();
-            updateTableMatrix(cpu[0], cpu[1]);
-        }
-        if (sign === "O") {
-            sign = "X";
-        } else {
-            sign = "O";
+            if (tableMatrix[row][cell] === "E") {
+                updateTableMatrix(row, cell);
+                sign = "X";
+                const computer = computerMove();
+                updateTableMatrix(computer[0], computer[1]);
+                sign = "O";
+            }
         }
     }
 
