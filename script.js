@@ -16,6 +16,8 @@ function startGame(cells, rows) {
     //sounds
     const laserSound = new Audio();
     laserSound.src = "sounds/laser-sound.mp3";
+    const moveSound = new Audio();
+    moveSound.src = "sounds/move.mp3";
 
     function updateDisplayTable() {
         for (let row = 0; row < tableRows; row++) {
@@ -40,6 +42,7 @@ function startGame(cells, rows) {
         if (sign === "O") {
             if (tableMatrix[row][cell] === "E") {
                 if (endGame === false) {
+                    moveSound.play();
                     updateTableMatrix(row, cell);
                     sign = "X";
                     checkWin()
