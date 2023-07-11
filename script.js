@@ -88,7 +88,10 @@ function startGame(cells, rows) {
                     "OOOE": 500,
                     "XXEE": 100,
                     "OEEE": 50,
-                    "XXEB": 40
+                    "XXEB": 40,
+                    "OOEE": 20,
+                    "OEEE": 10,
+                    "EEEE": 1
                 }
 
                 const patternValues = {
