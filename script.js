@@ -13,6 +13,10 @@ function startGame(cells, rows) {
     let sign = "O";
     let endGame = false;
 
+    //sounds
+    const laserSound = new Audio();
+    laserSound.src = "sounds/laser-sound.mp3";
+
     function updateDisplayTable() {
         for (let row = 0; row < tableRows; row++) {
             for (let cell = 0; cell < tableCells; cell++) {
@@ -159,6 +163,7 @@ function startGame(cells, rows) {
             function makeLine(rowMove, cellMove, draw = false) {
                 if (draw === true) {
                     endGame = true;
+                    laserSound.play();
                     for (let i = -2; i < 3; i++) {
                         if (tableMatrix[row + (i * rowMove)][cell + (i * cellMove)] !== undefined) {
                             table.rows[row + (i * rowMove) + 1].cells[cell + (i * cellMove) + 1].style.color = "red";
