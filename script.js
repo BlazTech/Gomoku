@@ -1,13 +1,14 @@
 function startGame(cells, rows) {
+    //html
     const tableContainer = document.querySelector(".table-container");
     tableContainer.innerHTML = "";
     const table = document.createElement("table");
     table.style.borderSpacing = "1px";
     tableContainer.append(table);
 
+    //game variables
     const tableCells = cells;
     const tableRows = rows;
-
     let tableMatrix = [];
     let sign = "O";
     let endGame = false;
