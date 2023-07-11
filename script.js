@@ -10,6 +10,7 @@ function startGame(cells, rows) {
 
     let tableMatrix = [];
     let sign = "O";
+    let endGame = false;
 
     function updateDisplayTable() {
         for (let row = 0; row < tableRows; row++) {
@@ -33,11 +34,17 @@ function startGame(cells, rows) {
     function handleInput(row, cell) {
         if (sign === "O") {
             if (tableMatrix[row][cell] === "E") {
-                updateTableMatrix(row, cell);
-                sign = "X";
-                const computer = computerMove();
-                updateTableMatrix(computer[0], computer[1]);
-                sign = "O";
+                if (endGame === false) {
+                    updateTableMatrix(row, cell);
+                    sign = "X";
+                    checkWin()
+                    if (endGame === false) {
+                        const computer = computerMove();
+                        updateTableMatrix(computer[0], computer[1]);
+                        sign = "O";
+                        checkWin();
+                    }
+                }
             }
         }
     }
@@ -140,11 +147,52 @@ function startGame(cells, rows) {
                 if (getValue(row, cell) > bestMoveValue) {
                     bestMove = [row, cell];
                     bestMoveValue = getValue(row, cell);
-                    console.log(bestMove, bestMoveValue);
                 }
             }
         }
         return bestMove;
+    }
+
+    function checkWin() {
+        function checkWinCellLines(row, cell) {
+            function makeLine(rowMove, cellMove, draw = false) {
+                if (draw === true) {
+                    endGame = true;
+                    for (let i = -2; i < 3; i++) {
+                        if (tableMatrix[row + (i * rowMove)][cell + (i * cellMove)] !== undefined) {
+                            table.rows[row + (i * rowMove) + 1].cells[cell + (i * cellMove) + 1].style.color = "red";
+                        }
+                    }
+                } else {
+                    let line = ""
+                    for (let i = -2; i < 3; i++) {
+                        try {
+                            if (tableMatrix[row + (i * rowMove)][cell + (i * cellMove)] !== undefined) {
+                                line += tableMatrix[row + (i * rowMove)][cell + (i * cellMove)];
+                            } else {
+                                line += "B";
+                            }
+                        } catch {
+                            line += "B";
+                        }
+                    }
+                    // console.log(line);
+                    return line;
+                }
+            }
+
+            (makeLine(0, 1) === "XXXXX" || makeLine(0, 1) === "OOOOO") && makeLine(0, 1, true);
+            (makeLine(1, 0) === "XXXXX" || makeLine(1, 0) === "OOOOO") && makeLine(1, 0, true);
+            (makeLine(1, 1) === "XXXXX" || makeLine(1, 1) === "OOOOO") && makeLine(1, 1, true);
+            (makeLine(-1, 1) === "XXXXX" || makeLine(-1, 1) === "OOOOO") && makeLine(-1, 1, true);
+        }
+
+        for (let row = 0; row < tableRows; row++) {
+            for (let cell = 0; cell < tableCells; cell++) {
+                checkWinCellLines(row, cell);
+            }
+        }
+
     }
 
     // tableMatrix creation
