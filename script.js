@@ -172,6 +172,7 @@ function startGame(cells, rows) {
                             table.rows[row + (i * rowMove) + 1].cells[cell + (i * cellMove) + 1].style.color = "red";
                         }
                     }
+                    setTimeout(() => {alert("Game ended, refresh to play again.")}, "3000");
                 } else {
                     let line = ""
                     for (let i = -2; i < 3; i++) {
